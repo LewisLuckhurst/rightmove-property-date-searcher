@@ -15,3 +15,6 @@ This is an example right move url: https://www.rightmove.co.uk/property-to-rent/
 
 The first date should be the earliest date you are avalaible to move into a property.
 The second date should be the latest date you are looking to move. 
+
+**This project will only work on MAC**
+If you wish to change this you will need to change the code on line **74**
