@@ -56,27 +56,29 @@ public class Main {
 
     private static void getValidProperties(HashSet<String> propertyToLookUp, Date startDate, Date endDate) {
         Runtime rt = Runtime.getRuntime();
-        try {
-            for (String propertyId : propertyToLookUp) {
-                String url = "https://www.rightmove.co.uk/property-to-rent/" + propertyId + ".html";
-                Document doc;
+        for (String propertyId : propertyToLookUp) {
+            String url = "https://www.rightmove.co.uk/property-to-rent/" + propertyId + ".html";
+            Document doc;
+            try {
                 doc = Jsoup.connect(url).get();
-
-                Date dateAvailable = new Date();
-                try {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                    String date = doc.getElementsByClass("_2RnXSVJcWbWv4IpBC1Sng6").get(0).childNodes().get(1).childNode(0).toString().trim();
-                    dateAvailable = simpleDateFormat.parse(date);
-                } catch (Exception ignored) {
-                }
-
-                if (dateAvailable.after(startDate) && dateAvailable.before(endDate)) {
-                    rt.exec("open " + url);
-                }
+            } catch (Exception e){
+                System.out.printf("Error when fetching URL: %s", url);
+                continue;
             }
-        } catch (
-                Exception e) {
-            throw new RuntimeException();
+
+            Date dateAvailable = new Date();
+            try {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                String date = doc.getElementsByClass("_2RnXSVJcWbWv4IpBC1Sng6").get(0).childNodes().get(1).childNode(0).toString().trim();
+                dateAvailable = simpleDateFormat.parse(date);
+            } catch (Exception ignored) {
+            }
+
+            if (dateAvailable.after(startDate) && dateAvailable.before(endDate)) {
+                try {
+                    rt.exec("open " + url);
+                } catch (Exception ignored){}
+            }
         }
     }
 
